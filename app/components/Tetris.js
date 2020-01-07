@@ -116,8 +116,6 @@ const Tetris = () => {
       }
     }
 
-    console.log("test --", tetro, xArr, curY);
-
     let count = 0;
     for (let y = curY; y < stage.length; y++) {
       let breakPoint = false;
