@@ -17,12 +17,10 @@ body {
 }
 
 /* --------------- SPECIFIC ELEMENTS --------------- */
-.selectText {
-  color: white;
-}
 
 .selectDropdown {
   width: 60%;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 0.9rem;
 }
 
