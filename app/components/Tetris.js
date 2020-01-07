@@ -98,18 +98,36 @@ const Tetris = () => {
   };
 
   const spacebarDown = () => {
-    let [curY, curX, tetro] = [player.pos.y, player.pos.x, player.tetromino];
-    const lastRowLen = tetro[tetro.length - 1].filter(x => x !== 0).length;
-    curY += lastRowLen === 0 ? tetro.length - 1 : tetro.length;
+    let [curY, curX, tetro] = [player.pos.y, player.pos.x, player.tetromino],
+      yIdx = 1;
+    curY += tetro.length;
+    while (tetro[tetro.length - yIdx].filter(x => x !== 0).length === 0) {
+      curY--;
+      yIdx++;
+    }
+
+    let xArr = [Infinity, -Infinity];
+    for (let y = 0; y < tetro.length; y++) {
+      for (let x = 0; x < tetro[y].length; x++) {
+        if (tetro[y][x] !== 0) {
+          xArr[0] = Math.min(xArr[0], x);
+          xArr[1] = Math.max(xArr[1], x);
+        }
+      }
+    }
+
+    console.log("test --", tetro, xArr, curY);
 
     let count = 0;
     for (let y = curY; y < stage.length; y++) {
-      if (
-        (stage[y][curX] && stage[y][curX][1] === "merged") ||
-        (stage[y][curX - 1] && stage[y][curX - 1][1] === "merged") ||
-        (stage[y][curX + 1] && stage[y][curX + 1][1] === "merged")
-      )
-        break;
+      let breakPoint = false;
+      for (let x = xArr[0]; x <= xArr[1]; x++) {
+        if (stage[y][curX + x] && stage[y][curX + x][1] === "merged") {
+          breakPoint = true;
+          break;
+        }
+      }
+      if (breakPoint) break;
       count++;
     }
     updatePlayerPos({ x: 0, y: count });
