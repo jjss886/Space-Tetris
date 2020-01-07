@@ -35,7 +35,7 @@ const StyledTetris = styled.div`
 
 const Tetris = () => {
   const modeDropTime = { Easy: 1000, Medium: 900, Hard: 800 };
-  const nextDropTime = { Easy: 0.9, Medium: 0.8, Hard: 0.75 };
+  const nextDropTime = { Easy: 0.8, Medium: 0.7, Hard: 0.65 };
 
   const [dropTime, setDropTime] = useState(null);
   const [initSpeed, setinitSpeed] = useState(null);
@@ -150,7 +150,7 @@ const Tetris = () => {
     drop();
   }, dropTime);
 
-  // console.log("render -", dropTime, mode, initSpeed, nextSpeed);
+  console.log("render -", dropTime, mode, initSpeed, nextSpeed);
 
   return (
     <StyledTetrisWrapper
