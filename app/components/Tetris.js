@@ -16,21 +16,14 @@ import { useGameStatus } from "../hooks/useGame";
 
 // STYLED COMPONENTS
 const StyledTetrisWrapper = styled.div`
-  // display: flex;
-  // justify-content: center;
   width: 100vw;
   height: 100vh;
 `;
 
 const StyledTetris = styled.div`
   display: flex;
-  align-items: flex-start;
+  justify-content: center;
   padding: 40px;
-  max-width: 900px;
-  margin: 0 auto;
-  // flex-shrink: 0;
-  // flex: 1 0 auto;
-  // width: 100%;
 
   aside {
     width: 100%;
@@ -43,7 +36,6 @@ const StyledTetris = styled.div`
 const Tetris = () => {
   const modeDropTime = { Easy: 1000, Medium: 900, Hard: 800 };
   const nextDropTime = { Easy: 0.9, Medium: 0.8, Hard: 0.75 };
-  let baseDropTime;
 
   const [dropTime, setDropTime] = useState(null);
   const [initSpeed, setinitSpeed] = useState(null);
@@ -61,12 +53,9 @@ const Tetris = () => {
     setMode(evt.target.value);
   };
 
-  // console.log("mode --", mode);
-
   const startGame = () => {
     setStage(createStage());
     setinitSpeed(modeDropTime[mode]);
-    // setDropTime(initSpeed);
     setNextSpeed(nextDropTime[mode]);
     resetPlayer();
     setScore(0);
@@ -76,9 +65,8 @@ const Tetris = () => {
   };
 
   useEffect(() => {
-    console.log("EFFECT -", initSpeed);
     setDropTime(initSpeed);
-  }, [initSpeed]);
+  }, [initSpeed, gameOver]);
 
   const moveHorizontal = dir => {
     if (!checkCollision(player, stage, { x: dir, y: 0 })) {
@@ -87,10 +75,10 @@ const Tetris = () => {
   };
 
   const drop = () => {
-    console.log("drop -", player, stage);
+    // console.log("drop -", player, stage);
     if (rows > level * 10) {
       setLevel(prev => prev + 1);
-      setDropTime(initSpeed * nextSpeed ** (level - 1));
+      setDropTime(initSpeed * nextSpeed ** level);
     }
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updatePlayerPos({ x: 0, y: 1, collided: false });
@@ -109,6 +97,24 @@ const Tetris = () => {
     drop();
   };
 
+  const spacebarDown = () => {
+    let [curY, curX, tetro] = [player.pos.y, player.pos.x, player.tetromino];
+    const lastRowLen = tetro[tetro.length - 1].filter(x => x !== 0).length;
+    curY += lastRowLen === 0 ? tetro.length - 1 : tetro.length;
+
+    let count = 0;
+    for (let y = curY; y < stage.length; y++) {
+      if (
+        (stage[y][curX] && stage[y][curX][1] === "merged") ||
+        (stage[y][curX - 1] && stage[y][curX - 1][1] === "merged") ||
+        (stage[y][curX + 1] && stage[y][curX + 1][1] === "merged")
+      )
+        break;
+      count++;
+    }
+    updatePlayerPos({ x: 0, y: count });
+  };
+
   const keyUp = ({ keyCode }) => {
     if (!gameOver && keyCode === 40)
       setDropTime(initSpeed * nextSpeed ** (level - 1));
@@ -120,6 +126,7 @@ const Tetris = () => {
       else if (keyCode === 38) playerRotate(stage, 1);
       else if (keyCode === 39) moveHorizontal(1);
       else if (keyCode === 40) moveDown();
+      else if (keyCode === 32) spacebarDown();
     }
   };
 
@@ -127,7 +134,7 @@ const Tetris = () => {
     drop();
   }, dropTime);
 
-  console.log("render -", mode, initSpeed, dropTime, nextSpeed);
+  // console.log("render -", dropTime, mode, initSpeed, nextSpeed);
 
   return (
     <StyledTetrisWrapper

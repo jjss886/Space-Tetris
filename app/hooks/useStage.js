@@ -13,11 +13,8 @@ export const useStage = (player, resetPlayer) => {
         if (row.findIndex(cell => cell[0] === 0) === -1) {
           setRowsCleared(prev => prev + 1);
           acm.unshift(new Array(newStage[0].length).fill([0, "clear"]));
-          return acm;
-        } else {
-          acm.push(row);
-          return acm;
-        }
+        } else acm.push(row);
+        return acm;
       }, []);
 
     const updateStage = prevStage => {
@@ -28,6 +25,7 @@ export const useStage = (player, resetPlayer) => {
       player.tetromino.forEach((row, y) => {
         row.forEach((val, x) => {
           if (val !== 0) {
+            // console.log("stage -", newStage, y, player.pos.y, x, player.pos.x);
             newStage[y + player.pos.y][x + player.pos.x] = [
               val,
               `${player.collided ? "merged" : "clear"}`
