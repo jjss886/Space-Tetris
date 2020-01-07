@@ -1,3 +1,4 @@
+/* --------------- GLOBAL ELEMENTS --------------- */
 h1 {
   margin: 0px;
 }
@@ -10,6 +11,22 @@ body {
   margin: 0;
 }
 
+/* --------------- GLOBAL ELEMENTS --------------- */
+.mainReactDiv {
+  display: flex;
+}
+
+/* --------------- SPECIFIC ELEMENTS --------------- */
+.selectText {
+  color: white;
+}
+
+.selectDropdown {
+  width: 60%;
+  font-size: 0.9rem;
+}
+
+/* --------------- EXTRAS --------------- */
 /* @font-face { */
 /* font-family: "pixel";
   src: url("font/Pixel-LCD-7.woff") fromt("woff");
