@@ -45,11 +45,9 @@ const Tetris = () => {
 
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
-  const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(
-    rowsCleared
-  );
+  const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
 
-  const setModeHandler = evt => {
+  const setModeHandler = (evt) => {
     setMode(evt.target.value);
   };
 
@@ -68,7 +66,7 @@ const Tetris = () => {
     setDropTime(initSpeed);
   }, [initSpeed, gameOver]);
 
-  const moveHorizontal = dir => {
+  const moveHorizontal = (dir) => {
     if (!checkCollision(player, stage, { x: dir, y: 0 })) {
       updatePlayerPos({ x: dir, y: 0 });
     }
@@ -77,14 +75,14 @@ const Tetris = () => {
   const drop = () => {
     // console.log("drop -", player, stage);
     if (rows > level * 10) {
-      setLevel(prev => prev + 1);
+      setLevel((prev) => prev + 1);
       setDropTime(initSpeed * nextSpeed ** level);
     }
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updatePlayerPos({ x: 0, y: 1, collided: false });
     } else {
       if (player.pos.y < 1) {
-        console.log("Game Over!");
+        // console.log("Game Over!");
         setGameOver(true);
         setDropTime(null);
       }
@@ -101,7 +99,7 @@ const Tetris = () => {
     let [curY, curX, tetro] = [player.pos.y, player.pos.x, player.tetromino],
       yIdx = 1;
     curY += tetro.length;
-    while (tetro[tetro.length - yIdx].filter(x => x !== 0).length === 0) {
+    while (tetro[tetro.length - yIdx].filter((x) => x !== 0).length === 0) {
       curY--;
       yIdx++;
     }
@@ -132,8 +130,7 @@ const Tetris = () => {
   };
 
   const keyUp = ({ keyCode }) => {
-    if (!gameOver && keyCode === 40)
-      setDropTime(initSpeed * nextSpeed ** (level - 1));
+    if (!gameOver && keyCode === 40) setDropTime(initSpeed * nextSpeed ** (level - 1));
   };
 
   const move = ({ keyCode }) => {
@@ -150,15 +147,10 @@ const Tetris = () => {
     drop();
   }, dropTime);
 
-  console.log("render -", dropTime, mode, initSpeed, nextSpeed);
+  // console.log("render -", dropTime, mode, initSpeed, nextSpeed);
 
   return (
-    <StyledTetrisWrapper
-      role="button"
-      tabIndex="0"
-      onKeyDown={e => move(e)}
-      onKeyUp={keyUp}
-    >
+    <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={(e) => move(e)} onKeyUp={keyUp}>
       <StyledTetris>
         <Stage stage={stage} />
 

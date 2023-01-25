@@ -5,20 +5,20 @@ module.exports = {
   mode: "development",
   output: {
     path: resolve(__dirname, "public"),
-    filename: "bundle.js"
+    filename: "bundle.js",
   },
-  devtool: "source-maps",
+  // devtool: "source-maps",
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: "babel-loader",
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      }
-    ]
-  }
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
 };
